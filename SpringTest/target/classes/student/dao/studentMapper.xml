@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="studentSQL">
+	<insert id="write" parameterType="student">
+		insert into STUDENT values(#{studentId},
+								  #{name},
+								  #{kor},
+								  #{eng},
+								  #{math},
+								  #{tot},
+								  #{avg},
+								  #{image1})
+	</insert>
+
+	<select id="getStudent" parameterType="String" resultType="student">
+		select * from STUDENT
+	</select>
+
+</mapper>
+ 

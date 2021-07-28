@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<context:component-scan base-package="user.controller"/>
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/image/" mapping="/image/**"></mvc:resources>
+	
+	<!-- Spring Web MVC를 하기 위해 설정해야 하는 값들을 자동으로 추가해준다 -->
+	<mvc:annotation-driven/>
+	
+	<!-- Resolver -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+		<property name="suffix" value=".jsp"/>
+	</bean> <!-- 웹화면을 브라우저에 뿌려주는/창을 띄워주는 역할, 우선순위 이게 더 크다 -->
+	
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0"/>
+	</bean>  <!-- view resolver로 안 가고 beanName~resolver로 가게 하려고 우선순위 0으로 줌 -->
+	
+	<!-- JSON / 알아서 jsonObject로 바꿔준다 -->
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="contentType" value="text/html;charset=UTF-8"></property>
+	</bean>
+		
+</beans>

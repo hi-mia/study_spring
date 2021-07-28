@@ -1,0 +1,41 @@
+package user.service;
+
+import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+
+import user.bean.UserDTO;
+import user.dao.UserDAO;
+
+@ComponentScan("spring.conf")
+public class UserInsertService implements UserService {
+	@Autowired //@Setter를 써도 된다
+	private UserDTO userDTO;
+	@Autowired //@Setter를 써도 된다
+	private UserDAO userDAO;
+	
+	@Override
+	public void execute() {
+		//입력
+		Scanner scan = new Scanner(System.in);
+		System.out.print("이름입력: "); 
+		String name = scan.next();
+		System.out.print("아이디 입력: "); 
+		String id = scan.next();
+		System.out.print("비밀번호 입력 : "); 
+		String pwd = scan.next();
+		
+		userDTO.setName(name);
+		userDTO.setId(id);
+		userDTO.setPwd(pwd);
+		
+		//DB
+		userDAO.write(userDTO);
+		
+		//응답
+		System.out.println("데이터를 DB에 저장하였습니다.");
+
+	}
+
+}

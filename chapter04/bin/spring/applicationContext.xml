@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+   <!-- Connection Pool & DataSource ;스프링에서 제공 안함, org.apache.~~ springframework 가 아님--> 
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+      <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+      <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+      <property name="username" value="c##java"/>
+      <property name="password" value="bit"/>
+      <property name="maxTotal" value="20"/>
+      <property name="maxIdle" value="3"/>
+   </bean> -->
+
+<!-- 	<bean id="dataSource" 
+			class="org.apache.commons.dbcp2.BasicDataSource"
+			p:driverClassName="oracle.jdbc.driver.OracleDriver"
+			p:url="jdbc:oracle:thin:@localhost:1521:xe"
+			p:username="c##java"
+			p:password="bit"
+			p:maxTotal="20"
+			p:maxIdle="3"/> -->
+			
+	<context:property-placeholder location="classpath:spring/db.properties"/> <!-- 시작위치: src -->
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+	      <property name="driverClassName" value="${jdbc.driver}" />
+	      <property name="url" value="${jdbc.url}"/>
+	      <property name="username" value="${jdbc.username}"/>
+	      <property name="password" value="${jdbc.password}"/>
+	      <property name="maxTotal" value="20"/>
+	      <property name="maxIdle" value="3"/>
+   </bean>
+
+	<!-- main -->
+	 <bean id="helloSpring" class="user.main.HelloSpring"></bean>
+	<!-- insert -->
+   <bean id="userInsertService" class="user.service.UserInsertService">
+		<property name="userDTO" ref="userDTO"/> <!-- setter로 얻어왔으니 값을 주입한다 -->
+		<property name="userDAO" ref="userDAOImpl"/> <!-- 세터 이름이 userDAO니 name은 userDAO, 참조는 UserDAOImpl  -->
+	</bean>
+	
+	<!-- select -->
+	<bean id="userSelectService" class="user.service.UserSelectService">
+		<property name="userDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<!-- update -->
+	<bean id="userUpdateService" class="user.service.UserUpdateService">
+		<property name="userDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<!-- delete -->
+	<bean id="userDeleteService" class="user.service.UserDeleteService">
+		<property name="userDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<bean id="userDTO" class="user.bean.UserDTO"></bean>
+	<bean id="userDAOImpl" class="user.dao.UserDAOImpl"> <!-- DAO가 이 템플릿 사용 -->
+	<!-- 	<property name="jdbcTemplate" ref="jdbcTemplate"/> -->
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+<!-- 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"/> 템플릿이 데이터 소스 가짐+생성자 통해서 값을 받아옴 
+	</bean> -->
+</beans>

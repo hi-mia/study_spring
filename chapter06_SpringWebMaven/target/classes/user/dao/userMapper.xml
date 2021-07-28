@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="userSQL">
+ 
+ <insert id = "write" parameterType="user">
+ 		insert into usertable values(#{name}, #{id}, #{pwd})
+ 	</insert>
+ 	
+ 	 <!-- 이 resultMap으로 강제 매핑해라 -->
+ 	<select id="getUserList" resultType="user"> <!-- 1행의 어디에 담을 것인가 / 1줄 단위로 처리 -->
+ 	<!-- 1행의 어디에 담을 것인가 / 1줄의 데이터를 어디에 담을 것인가 를 알려주면 됨 -->
+ 		select * from usertable
+ 	</select>
+ 	
+ 	<delete id = "delete" parameterType = "String">
+ 		delete usertable where id=#{id}
+ 	</delete>
+ 	
+ 	<select id = "getUser" parameterType = "String" resultType = "user.bean.UserDTO">
+ 		select * from usertable where id = #{id}
+ 	</select>
+ 	
+ 	<update id = "modify" parameterType = "java.util.Map">
+ 		update usertable set name = #{name}, pwd = #{pwd} where id = #{id}
+ 	</update>
+ 	
+	<select id="search" parameterType="java.util.Map" resultType="user"> 
+		select * from usertable where ${searchOption} like '%'||#{searchText}||'%' 
+	</select>
+
+   <select id="isExistId" parameterType="String" resultType="user">
+   		select *from usertable where id=#{id}
+   </select>
+ 
+ </mapper>
